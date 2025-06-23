@@ -1,493 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Convert a 360° panorama to a cubemap with Vayomni Cut Txt">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vayomni Cut Txt - Panorama to Cubemap Converter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a2e0e6c3f3.js" crossorigin="anonymous"></script>
   <style>
     :root {
-      --primary-color: #4a6bff;
-      --secondary-color: #f8f9fa;
-      --text-color: #333;
-      --border-color: #ddd;
-      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
-      color: var(--text-color);
-      background-color: #f5f5f5;
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 2em auto;
-      padding: 2em;
-      background: white;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 2em;
-      padding-bottom: 1em;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    h1 {
-      color: var(--primary-color);
-      margin-bottom: 0.5em;
-    }
-    
-    h2 {
-      color: var(--primary-color);
-      margin-top: 1.5em;
-      font-size: 1.5em;
-    }
-    
-    .brand {
-      font-weight: bold;
-      color: var(--primary-color);
-      font-size: 1.2em;
-    }
-    
-    section {
-      margin-bottom: 2em;
-    }
-    
-    .settings > * {
-      margin-top: 1em;
-      margin-bottom: 1em;
-    }
-    
-    #cubemap {
-      width: 100%;
-      min-height: 400px; /* Dikurangi agar lebih fleksibel */
-      position: relative;
-      border: 1px solid var(--border-color);
-      background: var(--secondary-color);
-      margin-top: 1em;
-      border-radius: 4px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      padding: 1em;
-      box-sizing: border-box;
-      overflow: auto; /* Menambahkan scroll jika gambar terlalu besar */
-    }
-    
-    #cubemap img {
-      max-width: 100%; /* Pastikan gambar tidak melebihi kontainer */
-      height: auto;
-    }
-    
-    input[type="file"], input[type="number"] {
-      padding: 0.5em;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-    }
-    
-    fieldset {
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      padding: 1em;
-      margin-top: 1em;
-    }
-    
-    legend {
-      padding: 0 0.5em;
-      font-weight: bold;
-      color: var(--primary-color);
-    }
-    
-    label {
-      display: block;
-      margin: 0.5em 0;
-    }
-    
-    button, input[type="radio"], input[type="checkbox"] {
-      margin-right: 0.5em;
-    }
-    
-    ul {
-      padding-left: 1.5em;
-    }
-    
-    footer {
-      text-align: center;
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 1px solid var(--border-color);
-      font-size: 0.9em;
-      color: #666;
-    }
-    
-    #generating {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.2em;
-      color: var(--primary-color);
-    }
-    
-    .cube-face {
-      margin: 0.5em;
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow);
-      transition: transform 0.2s;
-      max-width: 30%; /* Membatasi lebar setiap wajah cube */
-      object-fit: cover; /* Memastikan gambar tidak memanjang */
-    }
-    
-    .cube-face:hover {
-      transform: scale(1.02);
-      cursor: pointer;
-    }
-    
-    .btn {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 0.6em 1.2em;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background-color 0.3s;
-    }
-    
-    .btn:hover {
-      background-color: #3a5bef;
+      --bg-color: #0d0d0d;
+      --card-color: #1a1a1a;
+      --primary: #00bfff;
+      --text-color: #f0f0f0;
+      --accent: #00ffd5;
     }
 
-    /* Media query untuk desktop */
-    @media (min-width: 768px) {
-      .container {
-        max-width: 1200px;
-      }
-      #cubemap {
-        min-height: 500px;
-      }
-      .cube-face {
-        max-width: 20%; /* Lebih kecil di desktop untuk 6 wajah */
-      }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(to right, #00bfff, #00ffd5);
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: #000;
+      font-weight: 700;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 960px;
+      margin: auto;
+    }
+
+    section {
+      background-color: var(--card-color);
+      padding: 2rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 15px rgba(0,255,255,0.05);
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+      font-size: 1.5rem;
+    }
+
+    .file-upload-container {
+      border: 2px dashed var(--primary);
+      border-radius: 0.8rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .file-upload-container:hover {
+      background-color: #111;
+    }
+
+    .file-upload-label input {
+      display: none;
+    }
+
+    .btn {
+      background: var(--primary);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      color: #000;
+      font-weight: bold;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    fieldset {
+      border: none;
+      margin-top: 1rem;
+    }
+
+    fieldset legend {
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    label {
+      display: block;
+      margin: 0.5rem 0;
+    }
+
+    input[type="number"] {
+      width: 60px;
+      margin-left: 0.5rem;
+      padding: 0.3rem;
+      border-radius: 4px;
+      border: none;
+    }
+
+    #cubemap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    #faces img {
+      width: 100%;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #faces img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .brand {
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    ul {
+      margin-top: 1rem;
+      padding-left: 1rem;
+    }
+
+    ul li {
+      margin-bottom: 0.5rem;
+      list-style: square;
+    }
+
+    #fileInfo {
+      margin-top: 1rem;
+      color: var(--accent);
+      font-weight: bold;
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <header>
-      <h1>Panorama to Cubemap Converter</h1>
-      <p class="brand">Vayomni Cut Txt</p>
-      <p>Convert a 360° panorama to six cube faces with ease</p>
-    </header>
+  <header>
+    <h1><i class="fas fa-cube"></i> Vayomni Cut Txt</h1>
+    <p>Panorama to Cubemap Converter</p>
+  </header>
 
-    <main>
-      <section>
-        <h2>Upload Panoramic Image</h2>
-        <label>Choose your panoramic image: 
+  <main>
+    <section>
+      <h2><i class="fas fa-cloud-upload-alt"></i> Upload Panoramic Image</h2>
+      <div class="file-upload-container">
+        <label class="file-upload-label">
+          <i class="fas fa-image fa-2x"></i><br><br>
+          <span>Drag & drop your image here or click to browse</span>
           <input id="imageInput" type="file" accept="image/*">
         </label>
-        <button class="btn" id="uploadBtn">Upload</button>
-        <ul>
-          <li>The image should be formatted with the equirectangular projection.</li>
-          <li>The image should have an aspect ratio of 2:1 (the width must be exactly twice the height).</li>
-        </ul>
-        <p>A cubemap will be automatically generated from your image.</p>
-      </section>
+      </div>
+      <div class="file-info" id="fileInfo" style="display: none;">
+        <i class="fas fa-check-circle"></i>
+        <span id="fileName"></span>
+      </div>
+      <button class="btn" id="uploadBtn"><i class="fas fa-upload"></i> Process Image</button>
+      <ul>
+        <li>Use an equirectangular (360°) image format</li>
+        <li>Aspect ratio must be 2:1 (width = 2 × height)</li>
+      </ul>
+    </section>
 
-      <section class="settings">
-        <h2>Conversion Settings</h2>
-        <div>
-          <label>Cube Rotation: 
-            <input id="cubeRotation" type="number" min="0" max="359" value="180">°
-          </label>
-        </div>
-        <fieldset title="The resampling algorithm to use when generating the cubemap.">
-          <legend>Interpolation type</legend>
-          <label><input type="radio" name="interpolation" value="lanczos" checked> Lanczos (best quality but slower)</label>
-          <label><input type="radio" name="interpolation" value="cubic"> Cubic (sharper details)</label>
-          <label><input type="radio" name="interpolation" value="linear"> Linear (faster processing)</label>
-        </fieldset>
-        <fieldset>
-          <legend>Output format</legend>
-          <label><input type="radio" name="format" value="png" checked> PNG (lossless)</label>
-          <label><input type="radio" name="format" value="jpg"> JPEG (smaller file size)</label>
-        </fieldset>
-      </section>
-
-      <section>
-        <h2>Cubemap Output</h2>
-        <p>Click on any cube face below to download it to your computer.</p>
-        <div id="cubemap">
-          <b id="generating" style="visibility:hidden">Generating cubemap faces...</b>
-          <output id="faces"></output>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <p>
-        <span class="brand">Vayomni Cut Txt</span> - Advanced image conversion tools
-        <br>
-        <small>Based on original work by <a href="https://github.com/jaxry">Lucas Crane</a></small>
-      </p>
-    </footer>
-  </div>
-
-  <script src="main.js"></script>
-</body>
-  </html><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Convert a 360° panorama to a cubemap with Vayomni Cut Txt">
-  <title>Vayomni Cut Txt - Panorama to Cubemap Converter</title>
-  <style>
-    :root {
-      --primary-color: #4a6bff;
-      --secondary-color: #f8f9fa;
-      --text-color: #333;
-      --border-color: #ddd;
-      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
-      color: var(--text-color);
-      background-color: #f5f5f5;
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 2em auto;
-      padding: 2em;
-      background: white;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 2em;
-      padding-bottom: 1em;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    h1 {
-      color: var(--primary-color);
-      margin-bottom: 0.5em;
-    }
-    
-    h2 {
-      color: var(--primary-color);
-      margin-top: 1.5em;
-      font-size: 1.5em;
-    }
-    
-    .brand {
-      font-weight: bold;
-      color: var(--primary-color);
-      font-size: 1.2em;
-    }
-    
-    section {
-      margin-bottom: 2em;
-    }
-    
-    .settings > * {
-      margin-top: 1em;
-      margin-bottom: 1em;
-    }
-    
-    #cubemap {
-      width: 100%;
-      min-height: 400px; /* Dikurangi agar lebih fleksibel */
-      position: relative;
-      border: 1px solid var(--border-color);
-      background: var(--secondary-color);
-      margin-top: 1em;
-      border-radius: 4px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      padding: 1em;
-      box-sizing: border-box;
-      overflow: auto; /* Menambahkan scroll jika gambar terlalu besar */
-    }
-    
-    #cubemap img {
-      max-width: 100%; /* Pastikan gambar tidak melebihi kontainer */
-      height: auto;
-    }
-    
-    input[type="file"], input[type="number"] {
-      padding: 0.5em;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-    }
-    
-    fieldset {
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      padding: 1em;
-      margin-top: 1em;
-    }
-    
-    legend {
-      padding: 0 0.5em;
-      font-weight: bold;
-      color: var(--primary-color);
-    }
-    
-    label {
-      display: block;
-      margin: 0.5em 0;
-    }
-    
-    button, input[type="radio"], input[type="checkbox"] {
-      margin-right: 0.5em;
-    }
-    
-    ul {
-      padding-left: 1.5em;
-    }
-    
-    footer {
-      text-align: center;
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 1px solid var(--border-color);
-      font-size: 0.9em;
-      color: #666;
-    }
-    
-    #generating {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.2em;
-      color: var(--primary-color);
-    }
-    
-    .cube-face {
-      margin: 0.5em;
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow);
-      transition: transform 0.2s;
-      max-width: 30%; /* Membatasi lebar setiap wajah cube */
-      object-fit: cover; /* Memastikan gambar tidak memanjang */
-    }
-    
-    .cube-face:hover {
-      transform: scale(1.02);
-      cursor: pointer;
-    }
-    
-    .btn {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 0.6em 1.2em;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background-color 0.3s;
-    }
-    
-    .btn:hover {
-      background-color: #3a5bef;
-    }
-
-    /* Media query untuk desktop */
-    @media (min-width: 768px) {
-      .container {
-        max-width: 1200px;
-      }
-      #cubemap {
-        min-height: 500px;
-      }
-      .cube-face {
-        max-width: 20%; /* Lebih kecil di desktop untuk 6 wajah */
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <header>
-      <h1>Panorama to Cubemap Converter</h1>
-      <p class="brand">Vayomni Cut Txt</p>
-      <p>Convert a 360° panorama to six cube faces with ease</p>
-    </header>
-
-    <main>
-      <section>
-        <h2>Upload Panoramic Image</h2>
-        <label>Choose your panoramic image: 
-          <input id="imageInput" type="file" accept="image/*">
+    <section class="settings">
+      <h2><i class="fas fa-sliders-h"></i> Conversion Settings</h2>
+      <div>
+        <label><i class="fas fa-sync-alt"></i> Cube Rotation:
+          <input id="cubeRotation" type="number" min="0" max="359" value="180">°
         </label>
-        <button class="btn" id="uploadBtn">Upload</button>
-        <ul>
-          <li>The image should be formatted with the equirectangular projection.</li>
-          <li>The image should have an aspect ratio of 2:1 (the width must be exactly twice the height).</li>
-        </ul>
-        <p>A cubemap will be automatically generated from your image.</p>
-      </section>
+      </div>
+      <fieldset>
+        <legend>Interpolation Type</legend>
+        <label><input type="radio" name="interpolation" value="lanczos" checked> Lanczos (best quality)</label>
+        <label><input type="radio" name="interpolation" value="cubic"> Cubic (sharper)</label>
+        <label><input type="radio" name="interpolation" value="linear"> Linear (fast)</label>
+      </fieldset>
+      <fieldset>
+        <legend>Output Format</legend>
+        <label><input type="radio" name="format" value="png" checked> PNG</label>
+        <label><input type="radio" name="format" value="jpg"> JPEG</label>
+      </fieldset>
+    </section>
 
-      <section class="settings">
-        <h2>Conversion Settings</h2>
-        <div>
-          <label>Cube Rotation: 
-            <input id="cubeRotation" type="number" min="0" max="359" value="180">°
-          </label>
-        </div>
-        <fieldset title="The resampling algorithm to use when generating the cubemap.">
-          <legend>Interpolation type</legend>
-          <label><input type="radio" name="interpolation" value="lanczos" checked> Lanczos (best quality but slower)</label>
-          <label><input type="radio" name="interpolation" value="cubic"> Cubic (sharper details)</label>
-          <label><input type="radio" name="interpolation" value="linear"> Linear (faster processing)</label>
-        </fieldset>
-        <fieldset>
-          <legend>Output format</legend>
-          <label><input type="radio" name="format" value="png" checked> PNG (lossless)</label>
-          <label><input type="radio" name="format" value="jpg"> JPEG (smaller file size)</label>
-        </fieldset>
-      </section>
+    <section>
+      <h2><i class="fas fa-cube"></i> Cubemap Output</h2>
+      <p>Click on any cube face below to download.</p>
+      <div id="cubemap">
+        <b id="generating" style="visibility:hidden">Generating cubemap faces...</b>
+        <output id="faces"></output>
+      </div>
+    </section>
+  </main>
 
-      <section>
-        <h2>Cubemap Output</h2>
-        <p>Click on any cube face below to download it to your computer.</p>
-        <div id="cubemap">
-          <b id="generating" style="visibility:hidden">Generating cubemap faces...</b>
-          <output id="faces"></output>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <p>
-        <span class="brand">Vayomni Cut Txt</span> - Advanced image conversion tools
-        <br>
-        <small>Based on original work by <a href="https://github.com/jaxry">Lucas Crane</a></small>
-      </p>
-    </footer>
-  </div>
-
-  <script src="main.js"></script>
+  <footer>
+    <p><span class="brand">Vayomni Cut Txt</span> — Advanced image conversion tools<br>
+    <small>Based on original work by <a href="https://github.com/jaxry" target="_blank" style="color: var(--primary);">Lucas Crane</a></small></p>
+  </footer>
 </body>
-   </html>
+</html>
